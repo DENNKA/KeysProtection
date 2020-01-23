@@ -1,3 +1,4 @@
+
 #define KEYS_SIZE 1
 #define PIN_CARD 7
 
@@ -22,7 +23,8 @@ void setup() {
   pinMode(PIN_CARD, INPUT);
 }
 
-
+#define d(x) Serial.print("#x "); Serial.print(x, DEC");
+#define dd d(isCard) d(pinValue) d(keys[i].isKey)
 
 void loop() {
   delay(200);
@@ -33,24 +35,21 @@ void loop() {
     isCard = digitalRead(PIN_CARD);
     
     if(isCard == false && pinValue == LOW && keys[i].isKey == true){
+      
+      while (isCard == false){
       //ALERT
+      isCard = digitalRead(PIN_CARD);
       Serial.println("ALERT!!!");
-    }
-    if(isCard == true){
-      if (pinValue == LOW && keys[i].isKey == true){
-        //ключ взяли
-        Serial.println(keys[i].room, DEC);
-        Serial.println("ключ забрали");
-        keys[i].isKey == false;
-        //посылаем на сервер
       }
-      if (pinValue == HIGH && keys[i].isKey == false){
-        //ключ принесли
-        Serial.println(keys[i].room, DEC);
-        Serial.println("ключ принесли");
-        keys[i].isKey == true;
-        //посылаем на сервер
-      }
+      keys[i].isKey = false;
     }
+    else if (isCard == true && keys[i].isKey == true && pinValue == LOW){
+      Serial.println("Key get out");
+      keys[i].isKey = false;
+      }
+       if (keys[i].isKey == false && pinValue == HIGH){
+        Serial.println("Key get up");
+        keys[i].isKey = true;
+        }
   }
 }
