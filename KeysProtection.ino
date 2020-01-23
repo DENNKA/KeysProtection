@@ -1,4 +1,3 @@
-#include <Servo.h>
 #include <SPI.h>
 #include <MFRC522.h> // библиотека "RFID".
 #define SS_PIN 10
